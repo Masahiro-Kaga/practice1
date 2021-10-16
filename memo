@@ -1,24 +1,152 @@
-100
-　
-　通常、コンポーネント内エレメントは全て、<div>…</div>のように囲まなければならない。div soupと呼んでいる。
-　ただ、それを解決する一つの方法として、エレメントで囲まずに、配列型にすることで可能になる。詳細コードはビデオ内にて。
-　しかし、この方法だと配列の結果を返すことになるので、map()同様、子コンポーネントにkeyプロパティを作ってやらないとエラーが発生する。
-　
-return (
-    <div>
-      {error && (
-        <ErrorModal ....
-    </div>
+152
+  
+  基本はstateの挙動を確認する。
+  トグルボタン作成。
+  This is new!の文字をトグル。
+  
+  １　
+  if(!showParagraph){
+      setShowParagraph(true);
+    }else{
+      setShowParagraph(false);
+    }
 
-↓↓↓↓↓↓↓↓↓↓
+  ２
+    setShowParagraph(!showParagraph);
 
-return (
-    [
-      {error && (
-        <ErrorModal ....
-    ]
+  ３
+    setShowParagraph(prevShowParagraph => !prevShowParagraph);
 
-101
-　もう一つのdiv soupを避ける方法として、Wrapperコンポーネントを個別に作成。
+
+153
+
+  同じくstateがどういう挙動を示すか確認するだけ。
+  Appでprops設定、からのDemoOutput.js、その下にMyParagraph.jsを作る。
+  そしてトグルを孫、子、親それぞれ絡めて起動させる。
+  メインは、ボタン押下した時に、どのコンポーネントが更新されるかってのを確認するだけ。
+  今までやってきたことのおさらい的な？
+
+
+154
+
+　React.memoの使い方と使う理由。
+　https://qiita.com/soarflat/items/b9d3d17b8ab1f5dbfed2
+　「抜粋」
+    React では、不要な再計算やコンポーネントの再レンダリングを抑えることが、パフォーマンス最適化の基本的な戦略となる。
+    それらを実現する手段としてReact.memo、useCallback、useMemoを利用する。
+    React 以外のパフォーマンスチューニングにも言えることだが、計測は必須。
+    無闇に利用してもパフォーマンスが向上するわけではなく、意味がない場合もあるため注意
+
+    React.memo
+      コンポーネント（コンポーネントのレンダリング結果）をメモ化する React の API（メソッド）。
+      以下のようなコンポーネントの再レンダリングをスキップすることで、パフォーマンスの向上が期待できるから。
+      ・レンダリングコストが高いコンポーネント
+      ・頻繁に再レンダリングされるコンポーネント内の子コンポーネント
+
+  実証（その１）
+    App,DemoOutput,MyParagraphそれぞれにコンソールログを用意。コンポーネントがリレンダリングされればログ発動。各コンポーネントの状態の変化だけを見たいので、Appのshowプロパティはfalseで固定にする。
+    この状態でボタンを押下すると、全てのコンソールログが発動、つまり全てのコンポーネントが更新されたことがわかる。
+    次に、DemoOutputのコンポーネントの最終行を
+      export default DemoOutput; →　export default React.memo(DemoOutput);
+    に変える。
+    すると、AppとButtonのログのみが発動。
+    つまり、コンポーネントのstateに変化が無い場合は、React.memoの機能により、コンポーネントが更新されるのを防ぐ。
+    もっと分かりやすく言うと、DemoOutputに詰んである、親から来るpropsの値に変更があるかどうかによって、DemoPutputコンポーネントが更新するかしないかが決まる。propsであるshowはずっとfalseのため、コンポーネントは更新されないと言うことになる。その子コンポーネントも同じ。
+
+  実証（その２）
+    では、ButtonコンポーネントもReact.memo(Button)をしてみてはどうか。なぜなら、<Button onClick={toggleParagraphHandler}>　のonClickプロパティ（toggleParagraphHandlerファンクション）も、常に機能的に変わらないものであるため。
+    しかし、React.memo(Button)としても、Button RUNNINGのログが出てしまう。
+
+  実証（その３）  
+    それでは、なぜ違いがあるのか。
+      成功　<DemoOutput show={false} />
+      失敗　<Button onClick={toggleParagraphHandler}>Toggle Paragraph!</Button>
+    つまり、propsのデータの種類の違いにある。
+    falseはboolean,toggleParagraphHandlerはメソッド。文字列、数字、booleanは、比較対象が同じであれば"==="の結果はtrueになる。一方で、オブジェクト、配列、ファンクションは、もし同じデータのように見えても、その値が更新されれば"==="で比較してもtrueにはならない。
+    Javaの授業で習った→基本型（プリミティブ型）と参照型の違い。
+    https://noumenon-th.net/programming/2017/02/11/primitive/
+
+    したがって、更新前と更新後のpropsを比較して同じかどうかを見極めるのは、コンピュータ側で"前のprops===後のprops"がtrueになるかどうかで、React.memoの挙動が決まる。（9:30からのビデオも参照）
+
+
+155
+
+  useCallbackを使って、toggleParagraphHandlerファンクション（参照型）をReact.memoの対象とする。
+
+  基本的には、React.memoと一緒に使うことを想定している。
+  上記のとおり、参照型はコンポーネントが更新されたら、表面上は同じに見えても、参照先が違う新たなデータに置き換わる・認識されてしまう。しかし、その参照型のデータにuseCallbackをリンクさせると、コンポーネントが更新しても、参照型データが新たなものに置き換わることなく、更新前のデータを利用することになる。
+  よって、
+    <Button onClick={toggleParagraphHandler}>Toggle Paragraph!</Button>
+    
+    の大元である
+    
+    const toggleParagraphHandler = () => {
+    setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+  };
+  　をuseCallbackを使って処理することで、toggleParagraphHandlerファンクションは新しいものに変わることなく、コンポーネントが更新されても同じものを使うということになる。
+
+  　その状態で、React.memoによりpropsが更新されたかどうかを判断した際、参照型でもuseCallbackの対象となる参照型データであれば、propsの値が変更されたと認識されないため、
+
+
+156
+
+　そもそも、useCallback()はコンポーネントが更新されてもデータを更新せず、以前のデータを使用（メモリに保存されているものをそのまま使用する＝主に参照型データを意識）するため、次のファンクションは、if内のallowToggleも外ではデータが更新されても、同じデータを使い続けるため、常に同じ結果（allowToggleの初期値がtrueならずっとtrue）になる。
 　
+  const toggleParagraphHandler = useCallback(() => {
+    if (allowToggle) {
+      setShowParagraph((prevShowParagraph) => !prevShowParagraph);
+    }
+  }, []);
+
+  それを解消するため、例外的にallowToggleのみコンポーネントの更新により変化があった際に反映させるために、[]の中にallowToggleを入力すると、実現することができる。ただ、その際はファンクションも新しいものに更新される。
+
+  クロージャ（closure）について動画で説明されてる。
+  https://www.sejuku.net/blog/25026
+  https://note.affi-sapo-sv.com/js-closure.php
+
+
+157-159
+
+  ???今までの復習というか、あまりよくわからない。飛ばして良いっぽい。
+
+
+160(難易度高め)
+
+  一つのコンポーネントを親で呼び出す際に、二つ以上のプロパティがある場合。特に、一つはプリミティブ、一つは参照型。
+    <DemoList title={listTitle} items=[5,3,1,10,9] />
+
+  この場合、
+    export default React.memo(DemoList);
+  とすることでtitleはただの変数だから、無駄なコンポーネントの更新を避けられる。
+  ただ、このままだとtitleの中身がチェンジしなかったとしても、配列は参照型だから更新されてしまう。（Video3:00）
+
+  特に、配列はperformance-intensiveなのでデータ処理でコンピュータ的に負荷がかかりやすく、あまりよろしくない。
+
+  こうした場合、ピンポイントでitemsなどの配列部分を抽出して独自に管理する方法として、useCallbackと同じように、useMemoを使うというのがある。
+
+　１　Demolist Component
+
+    const { items } = props;  //下の注意を参照。
+    
+    const sortedList = useMemo(() => {
+    console.log('Items sorted');
+    return items.sort((a, b) => a - b);
+  }, [items]);
+
+    propsのitemsに変更があれば、発動される。ように見えるが
+
+    ただ、このままだと、itemsは配列（参照型）なので、親のApp内のitemsはAppが更新される度（例えば、他のコンポーネント、Buttonが更新されたり）に、新しいメモリを使って新しい配列（表状は数値等は同じだが）を作り保存するので、上が発動してしまう。console.logの結果を見れば確認できる。
+    これを防ぐためには、面倒だが親にもこのuseMemoを使う必要がある。
+
+  ２　App Component
+    <DemoList title={listTitle} items=useMemo(() => [5,3,1,10,9],[])/>
+    ビデオでは、最終的に効率良いコードで締めくくっている。
+
+  注意　5:22
+  Destructuring
+    以前やった、オブジェクトデータから一部のデータを抽出する方法。
+    今回のケースは、propsがオブジェクトデータを持っていて、そのうちのitemsのみを抽出する方法。
+    const { items } = props;
+
+  
 

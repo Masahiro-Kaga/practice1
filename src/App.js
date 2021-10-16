@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 
-import AddUser from './components/Users/AddUser';
-import UsersList from './components/Users/UsersList';
+import Button from './components/UI/Button/Button';
+import DemoOutput from './components/Demo/DemoOutput';
+import './App.css';
 
 function App() {
-  const [usersList, setUsersList] = useState([]);
+  const [showParagraph, setShowParagraph] = useState(false);
 
-  const addUserHandler = (uName, uAge) => {
-    setUsersList((prevUsersList) => {
-      return [
-        ...prevUsersList,
-        { name: uName, age: uAge, id: Math.random().toString() },
-      ];
-    });
+  console.log('APP RUNNING');
+
+  const toggleParagraphHandler = () => {
+    setShowParagraph((prevShowParagraph) => !prevShowParagraph);
   };
-
+ 
   return (
-    <div>
-      <AddUser onAddUser={addUserHandler} />
-      <UsersList users={usersList} />
+    <div className="app">
+      <h1>Hi there!</h1>
+      <DemoOutput show={false} />
+      <Button onClick={toggleParagraphHandler}>Toggle Paragraph!</Button>
     </div>
   );
 }
