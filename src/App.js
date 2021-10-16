@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="app">
-      <DemoList title={listTitle} items={[5, 3, 1, 10, 9]}/>
+      <DemoList title={listTitle} items={useMemo(()=> [5, 3, 1, 10, 9],[]) }/>
       <Button onClick={changeTitleHandler}>Change List Title</Button>
     </div>
   );
