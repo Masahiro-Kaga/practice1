@@ -70,4 +70,61 @@ validateの内容としては、@が入っているかどうかの判定のみ�
 207
 
 nameとemailの項がほぼ同じなため、カスタムフックを作成する。
-１　
+１　カスタムフック用のフォルダとファイルを作成。
+２　どの部分を共通部分としてカスタムフックに組み込むことができるか見極めて、カスタムフックの中にステートや変数などを入れて、returnで返すものも設定する。なお、returnで返すものは、オブジェクト形式とする。理由は４冒頭。
+    returnで返して向こうに渡さなければならない変数とそうでない変数（ex enteredValueTouched）を分ける時の基準は、渡す先のファイルで実際に共通部分（カスタムフックで設定する部分）を削除した後に残るであろうコードの中に、その必要な変数等が残っていたら、それはカスタムフックから渡されるべき変数等である、と言うことが言える。
+    ※ event.preventDefault();　直下のsetEnteredNameTouched(true)は、早い段階で必要なくなっているものなので、そのまま何も考えずに削除。
+
+＊難ポイント＊
+３　カスタムフックを使うベースとなるファイルで、独自の変数やファンクションがある場合の取り扱い。
+    今回のケースは、nameに対してtrim()、emailに対してincludes('@')と言うファンクションがそれぞれ設定されていて、そのファンクションを使って出された結果（データ）を、カスタムフックの中で使用すると言う想定。
+（１）use-input.js
+    const useInput = (validateValue) => {
+            const valueIsValid = validateValue(enteredValue);
+    validateValueは、カスタムフックを呼び出すもとファイルの中にある各独自ファンクションで、このカスタムフックの中からenteredValueを引数として使う、という想定。
+（２）SimpleInput.js
+    const {
+        value: enteredName,
+        isValid: enteredNameIsValid,
+        hasError: nameInputHasError,
+        valueChangeHandler: nameChangedHandler,
+        inputBlurHandler: nameBlurHandler,
+        reset: resetNameInput
+     } = useInput(value => value.trim() !== '');
+     useInputの中の引数にファンクション等が入っている。問題はこのvalueと言う変数。例としてこの名前を使うのは個人的には好ましくないと思うが（上でもvalueと言う名前を使ってるから）、このvalueと言うのは、上と同じではなくて、カスタムフックから持ってきた引数にあたることに注意。
+     この引数の中で処理された結果を、またuse-inputのカスタムフックに戻して、それ以降のコード
+     （const hasError = !valueIsValid && isTouched; よりも下のコード）を走らせる。
+
+４　カスタムフックにて、オブジェクト形式でデータが渡されたので、渡された先で、カスタムフックを呼び出す。
+　　その際、オブジェクト形式なので、defrastracture（解体）して、それぞれ変数やファンクションを任意の名前と一緒に設定する。なお、もう必要のない変数とかステートとかは、カスタムフックの中の変数やファンクションなどを一つ一つ実装していきながら、それに対応する必要のないものを消していく方が混乱しなくてよい。効率の良い変数際割り当て方法は、ターミナルに出現するエラー表示”**** is not defined”　を一つずつ潰していくと言うのが良い。
+
+５　上記変数やファンクションを実際に適用させていく。
+
+
+207 
+
+nameと同様に、emailを実装。
+
+
+208 
+
+BasicForm.jsは、練習用に用意されたファイル。フロムスクラッチから、もう一度やってみよう、と言うものなので、スキップしてもオッケー。
+
+
+209,210
+
+基本的には、BasicForm.jsの答え合わせ。
+だが、
+@@@@@@@@@@@@@@
+Formik
+@@@@@@@@@@@@@@
+と言うフレームワーク、ライブラリの紹介があるので、Don't miss it.
+https://qiita.com/macotok/items/df1fdcac02e64638d9c8
+
+
+211
+
+useReducerを使って、カスタムフックのコードをもっとスッキリさせる。
+
+
+
