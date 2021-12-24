@@ -63,5 +63,6 @@ us-slice関連から
 ８ CartItem.js。すでに真ん中に表示されたカートの中のプラスとマイナスのボタンを動作させる。いくつかの作り・留意事項はProductItem.jsとちょっと同じ。addの他にremoveも必要となる。
 
 完成バージョンの挙動は、17:20あたりで確認。
+なお、カートのマイナスボタンを押すと、個数は減るが合計額は減らないのは、マックスのコードをそのまま写しても同じ挙動。（cart-sliceのどっちのreducerのelse以降に、existingItem.totalPrice = existingItem.price * existingItem.quantity　を入れてやればいい。）
 
 
