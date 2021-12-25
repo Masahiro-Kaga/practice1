@@ -27,7 +27,8 @@ us-slice関連から
 
 252 後半ー13:35
 次に、cart-slice（難しいし、コード長い）
-１ cart-slice.jsを作成（多少複雑）、findとfilter functionを使います。
+１ cart-slice.jsを作成（多少複雑）、findとfilter functionを使います。   
+   配列に入れる項目の考え方としては、とにかく別のところでstore(state)として加工なしで使えるように、多くの項目を入れておく。Dispatchで他のコンポーネントボタンの発動で持ってくるデータはid,title,priceしかないが、配列にはstoreには後々すぐつかう、思いつくデータを全部入れること。　
     initialState作成。
     addItemToCart(state,action),removeItemFrom(state,action)の二つの箱（reducer）作成。
         addItemToCart
