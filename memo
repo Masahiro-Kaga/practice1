@@ -136,3 +136,19 @@ fetchしてデータの送信が成功したか失敗したかを、ヘッダー
 
 なお、cssの設定の仕方、特にテンプレートリテラルの使い方はおさらいかつ重要という意味で要チェック。
   const cssClasses = `${classes.notification} ${specialClasses}`;
+
+
+260
+
+別の方法。React thunk というミドルウェアなるものを使用して非同期処理させるというもの。
+だけど、あんまり意味わからないから、スキップ。この前のやり方でも全然問題ないとのこと。
+キーワードは、action creatorだって。
+多少わかりやすいかなと思うウェブサイト。
+https://www.youtube.com/watch?v=1QI-UE3-0PU
+https://qiita.com/jima-r20/items/7fee2f00dbd1f302e373
+    『Redux-Thunkとは、（コンポーネント内ではなく、）ReduxのAction Creatorに非同期処理を実装するためのミドルウェア
+https://nishinatoshiharu.com/redux-thunk-axios-tutorial/　　（非同期処理でTodoを表示させる、の部分、1ページくらいだけ）
+
+
+261
+

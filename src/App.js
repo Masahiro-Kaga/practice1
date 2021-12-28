@@ -7,13 +7,14 @@ import Products from './components/Shop/Products';
 import { uiActions } from './store/ui-slice';
 import Notification from './components/UI/Notification';
 
-let initial = false;
+let isInitial = true;
 
 function App() {
   const dispatch = useDispatch();
   const showCart = useSelector((state) => state.ui.cartIsVisible);
   const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.ui.notification);
+
   useEffect(() => {
     const sendCartData = async () => {
       dispatch(
@@ -23,9 +24,8 @@ function App() {
           message: 'Sending cart data!',
         })
       );
-
       const response = await fetch(
-        'https://react-http-f3ec8-default-rtdb.firebaseio.com/cart.json',
+        'https://react-http-6b4a6.firebaseio.com/cart.json',
         {
           method: 'PUT',
           body: JSON.stringify(cart),
@@ -36,31 +36,40 @@ function App() {
         throw new Error('Sending cart data failed.');
       }
 
-      dispatch(uiActions.showNotification({
-        status: 'success',
-        title: 'Success!',
-        message: 'Sent cart data successfully!',
-      }));
+      dispatch(
+        uiActions.showNotification({
+          status: 'success',
+          title: 'Success!',
+          message: 'Sent cart data successfully!',
+        })
+      );
+    };
 
-    }
-
-    if(!initial){
-      initial = true;
+    if (isInitial) {
+      isInitial = false;
       return;
     }
 
-    sendCartData().catch((error)=>{
-      dispatch(uiActions.showNotification({
-        status: 'error',
-        title: 'Error!',
-        message: 'Sending cart data failed!',
-      }))
-    })
+    sendCartData().catch((error) => {
+      dispatch(
+        uiActions.showNotification({
+          status: 'error',
+          title: 'Error!',
+          message: 'Sending cart data failed!',
+        })
+      );
+    });
+  }, [cart, dispatch]);
 
-  }, [cart,dispatch]);
   return (
     <Fragment>
-      {notification && <Notification status={notification.status} title={notification.title} message={notification.message}></Notification>}
+      {notification && (
+        <Notification
+          status={notification.status}
+          title={notification.title}
+          message={notification.message}
+        />
+      )}
       <Layout>
         {showCart && <Cart />}
         <Products />
