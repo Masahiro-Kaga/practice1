@@ -99,6 +99,7 @@ useEffectとuseSelectorの合わせ技で、actionを起こした時と同時に
 ただしこの場合、useEffectのdependencyであるcartが更新（ページをリロード）された際に、空のデータを送って、今までのデータを上書きしてしまうので問題。次のレクチャーで直すって言ってる。確かにfirebase画面を一緒に開いてたら、その様子が窺い知れる。
 
 cart-slice.jsのreplace アクション、結局何にあ使うかわからん。が、とりあえずコード打っておく。
+ー＞最後の261で使う。
 
 ちなみに、Googleのインスペクション（検証）のネットワークタブを見て、何がどう送られたかを見ることができるので、実用すること。
 
@@ -150,5 +151,11 @@ https://qiita.com/jima-r20/items/7fee2f00dbd1f302e373
 https://nishinatoshiharu.com/redux-thunk-axios-tutorial/　　（非同期処理でTodoを表示させる、の部分、1ページくらいだけ）
 
 
-261
+261（データ送るやつ完了したから、Fetching data、データ持ってくる）、262と263も
+
+260のthunkバージョンからの続きのコード。リロードしてもfirebaseから現時点のデータを持って表示させる。
+手順としては、
+    cart-actions.jsを作って、sendCartDataをcart-slice.jsから載せ替える。
+    cart-actions.jsの中に、新たにfetchCartData()を乗せて、今度はPUTではなく、firebaseデータベースからGETする。ここで初めて、cartActions.replaceCart()が使われる。
+
 
