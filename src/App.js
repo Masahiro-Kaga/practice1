@@ -1,43 +1,25 @@
-import { Fragment, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 
-import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
-import Products from './components/Shop/Products';
-import Notification from './components/UI/Notification';
-import { sendCartData } from './store/cart-slice';
-
-let isInitial = true;
+import UserProfile from './components/Profile/UserProfile';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
 
 function App() {
-  const dispatch = useDispatch();
-  const showCart = useSelector((state) => state.ui.cartIsVisible);
-  const cart = useSelector((state) => state.cart);
-  const notification = useSelector((state) => state.ui.notification);
-
-  useEffect(() => {
-    if (isInitial) {
-      isInitial = false;
-      return;
-    }
-
-    dispatch(sendCartData(cart));
-  }, [cart, dispatch]);
-
   return (
-    <Fragment>
-      {notification && (
-        <Notification
-          status={notification.status}
-          title={notification.title}
-          message={notification.message}
-        />
-      )}
-      <Layout>
-        {showCart && <Cart />}
-        <Products />
-      </Layout>
-    </Fragment>
+    <Layout>
+      <Switch>
+        <Route path='/' exact>
+          <HomePage />
+        </Route>
+        <Route path='/auth'>
+          <AuthPage />
+        </Route>
+        <Route path='/profile'>
+          <UserProfile />
+        </Route>
+      </Switch>
+    </Layout>
   );
 }
 
