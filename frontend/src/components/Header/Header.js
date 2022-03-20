@@ -17,10 +17,10 @@ const Header = () => {
 
   return (
     <div>
-      <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800">
+      <nav className="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-800">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <a href="#" className="flex items-center">
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
               Dream Diary
             </span>
           </a>
@@ -43,7 +43,7 @@ const Header = () => {
               <input
                 type="text"
                 id="email-adress-icon"
-                className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block p-2 pl-10 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Search..."
               />
             </div>
@@ -51,7 +51,7 @@ const Header = () => {
               id="mobile-menu-toggle"
               onClick={mobileToggleHandler}
               type="button"
-              className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
               aria-controls="mobile-menu"
               aria-expanded="false"
             >
@@ -92,7 +92,7 @@ const Header = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white"
+                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
                   aria-current="page"
                 >
                   Home
@@ -101,7 +101,7 @@ const Header = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
                 >
                   About
                 </a>
@@ -109,7 +109,7 @@ const Header = () => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
                 >
                   Services
                 </a>
