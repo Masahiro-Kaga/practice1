@@ -4,8 +4,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-      transitionProperty: {
-        'visible': 'visibility',
+      backgroundImage:{
+        "lp-backgroundimg" : "url('https://source.unsplash.com/random/?study')"
       }
     },
   },
