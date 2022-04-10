@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const [isNavbarToggle, setIsNavbarToggle] = useState(false);
@@ -19,11 +20,11 @@ const Header = () => {
     <div className="fixed top-0 left-0 w-screen">
       <nav className="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-800">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
-          <a href="#" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
               Dream Diary
             </span>
-          </a>
+          </Link>
           <div className="flex md:order-2">
             <div className="hidden relative mr-3 md:mr-0 md:block">
               <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -91,7 +92,7 @@ const Header = () => {
             <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
               <li>
                 <a
-                  href="#"
+                  href="/"
                   className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
                   aria-current="page"
                 >
@@ -99,22 +100,14 @@ const Header = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/myNotes"
                   className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
                 >
-                  About
-                </a>
+                  MyNotes
+                </Link>
               </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
-                >
-                  Services
-                </a>
-              </li>
-            </ul>
+           </ul>
           </div>
         </div>
       </nav>
